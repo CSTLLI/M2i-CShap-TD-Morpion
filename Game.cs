@@ -10,8 +10,7 @@ public class Game
         _board = new Board();
         _currentPlayer = 'X';
     }
-
-    // Étape 3 : Gestion des tours
+    
     public void Run()
     {
         Console.WriteLine("=== JEU DE MORPION ===\n");
