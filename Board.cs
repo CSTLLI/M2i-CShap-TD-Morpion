@@ -3,6 +3,17 @@ namespace Morpion;
 public class Board
 {
     private char[,] _cells;
+    private int[][] _winningCombinations = new int[][]
+    {
+        new int[] { 0, 1, 2 }, // Ligne 1
+        new int[] { 3, 4, 5 }, // Ligne 2
+        new int[] { 6, 7, 8 }, // Ligne 3
+        new int[] { 0, 3, 6 }, // Colonne 1
+        new int[] { 1, 4, 7 }, // Colonne 2
+        new int[] { 2, 5, 8 }, // Colonne 3
+        new int[] { 0, 4, 8 }, // Diagonale \
+        new int[] { 2, 4, 6 }  // Diagonale /
+    };
 
     public Board()
     {
@@ -69,5 +80,27 @@ public class Board
         int line = (position - 1) / 3;
         int column = (position - 1) % 3;
         _cells[line, column] = player;
+    }
+
+    // Étape 5 : Vérifier la victoire
+    public bool CheckWin(char player)
+    {
+        foreach (int[] combination in _winningCombinations)
+        {
+            if (GetCellAt(combination[0]) == player &&
+                GetCellAt(combination[1]) == player &&
+                GetCellAt(combination[2]) == player)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private char GetCellAt(int position)
+    {
+        int line = position / 3;
+        int column = position % 3;
+        return _cells[line, column];
     }
 }

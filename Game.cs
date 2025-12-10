@@ -24,6 +24,14 @@ public class Game
             int position = GetPlayerMove();
             _board.PlayMove(position, _currentPlayer);
 
+            // Étape 5 : Vérifier la victoire
+            if (_board.CheckWin(_currentPlayer))
+            {
+                _board.Display();
+                Console.WriteLine($"🎉 Le joueur {_currentPlayer} a gagné !");
+                break;
+            }
+
             SwitchPlayer();
         }
     }
