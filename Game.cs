@@ -19,11 +19,9 @@ public class Game
         {
             _board.Display();
 
-            // Étape 4 : Saisir et valider un coup
-            int position = GetPlayerMove();
-            _board.PlayMove(position, _currentPlayer);
+            var (line, column) = GetPlayerMove();
+            _board.PlayMove(line, column, _currentPlayer);
 
-            // Étape 5 : Vérifier la victoire
             if (_board.CheckWin(_currentPlayer))
             {
                 _board.Display();
@@ -31,22 +29,30 @@ public class Game
                 break;
             }
 
+            if (_board.IsFull())
+            {
+                _board.Display();
+                Console.WriteLine("Match nul ! Égalité !");
+                break;
+            }
+
             SwitchPlayer();
         }
     }
 
-    private int GetPlayerMove()
+    private (int line, int column) GetPlayerMove()
     {
         Console.Write($"Joueur {_currentPlayer}, choisissez une position (1-9) : ");
         string? input = Console.ReadLine();
 
-        if (int.TryParse(input, out int position) && position >= 1 && position <= 9)
+        if (int.TryParse(input, out int position))
         {
-            if (_board.IsValidMove(position))
+            var coordinates = _board.IsValidMove(position);
+            if (coordinates.HasValue)
             {
-                return position;
+                return coordinates.Value;
             }
-            Console.WriteLine("Cette case est déjà occupée !");
+            Console.WriteLine("Cette case est déjà occupée ou position invalide !");
         }
         else
         {

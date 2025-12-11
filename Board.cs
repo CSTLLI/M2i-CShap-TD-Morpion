@@ -41,16 +41,8 @@ public class Board
         for (int line = 0; line < 3; line++)
         {
             Console.Write(" ");
-            for (int column = 0; column < 3; column++)
-            {
-                Console.Write(_cells[line, column]);
-                if (column < 2)
-                {
-                    Console.Write(" | ");
-                }
-            }
-            Console.WriteLine();
-
+            Console.WriteLine($"{_cells[line, 0]} | {_cells[line, 1]} | {_cells[line, 2]}");
+            
             if (line < 2)
             {
                 Console.WriteLine("---|---|---");
@@ -60,36 +52,29 @@ public class Board
         Console.WriteLine();
     }
     
-    public bool IsValidMove(int position)
+    public (int line, int column)? IsValidMove(int position)
     {
-        if (position < 1 || position > 9) return false;
+        if (position < 1 || position > 9) return null;
 
         int line = (position - 1) / 3;
         int column = (position - 1) % 3;
 
         char cell = _cells[line, column];
-        return cell != 'X' && cell != 'O';
+        if (cell == 'X' || cell == 'O') return null;
+
+        return (line, column);
     }
-    
-    public void PlayMove(int position, char player)
+
+    public void PlayMove(int line, int column, char player)
     {
-        int line = (position - 1) / 3;
-        int column = (position - 1) % 3;
         _cells[line, column] = player;
     }
     
     public bool CheckWin(char player)
     {
-        foreach (int[] combination in _winningCombinations)
-        {
-            if (GetCellAt(combination[0]) == player &&
-                GetCellAt(combination[1]) == player &&
-                GetCellAt(combination[2]) == player)
-            {
-                return true;
-            }
-        }
-        return false;
+        return _winningCombinations.Any(combination =>
+            combination.All(position => GetCellAt(position) == player)
+        );
     }
     
     private char GetCellAt(int position)
@@ -97,5 +82,10 @@ public class Board
         int line = position / 3;
         int column = position % 3;
         return _cells[line, column];
+    }
+
+    public bool IsFull()
+    {
+        return _cells.Cast<char>().All(cell => cell == 'X' || cell == 'O');
     }
 }
