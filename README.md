@@ -1,4 +1,4 @@
-﻿# Morpion TD1 - Console
+﻿# Morpion TD - Console
 
 ## Plan de développement :
 

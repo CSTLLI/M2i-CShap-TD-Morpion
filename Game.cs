@@ -3,12 +3,16 @@ namespace Morpion;
 public class Game
 {
     private Board _board;
-    private char _currentPlayer;
+    private Player _currentPlayer;
+    private Player _playerX;
+    private Player _playerO;
 
     public Game()
     {
         _board = new Board();
-        _currentPlayer = 'X';
+        _playerX = new Player('X');
+        _playerO = new Player('O');
+        _currentPlayer = _playerX;
     }
     
     public void Run()
@@ -20,12 +24,12 @@ public class Game
             _board.Display();
 
             var (line, column) = GetPlayerMove();
-            _board.PlayMove(line, column, _currentPlayer);
+            _board.PlayMove(line, column, _currentPlayer.Symbol);
 
-            if (_board.CheckWin(_currentPlayer))
+            if (_board.CheckWin(_currentPlayer.Symbol))
             {
                 _board.Display();
-                Console.WriteLine($"🎉 Le joueur {_currentPlayer} a gagné !");
+                Console.WriteLine($"🎉 Le joueur {_currentPlayer.Symbol} a gagné !");
                 break;
             }
 
@@ -42,7 +46,7 @@ public class Game
 
     private (int line, int column) GetPlayerMove()
     {
-        Console.Write($"Joueur {_currentPlayer}, choisissez une position (1-9) : ");
+        Console.Write($"Joueur {_currentPlayer.Symbol}, choisissez une position (1-9) : ");
         string? input = Console.ReadLine();
 
         if (int.TryParse(input, out int position))
@@ -64,6 +68,6 @@ public class Game
 
     private void SwitchPlayer()
     {
-        _currentPlayer = _currentPlayer == 'X' ? 'O' : 'X';
+        _currentPlayer = _currentPlayer == _playerX ? _playerO : _playerX;
     }
 }
