@@ -16,10 +16,15 @@ public class Player
         }
     }
 
-    public (int line, int column) GetMove(Board board)
+    public async Task<(int line, int column)> GetMove(Board board)
     {
         if (IsBot)
         {
+            Console.WriteLine($"Le robot {Symbol} réfléchit...");
+
+            int thinkingTime = _random!.Next(500, 2500);
+            await Task.Delay(thinkingTime);
+
             var availableMoves = board.GetAvailableMoves();
             int randomPosition = availableMoves[_random!.Next(availableMoves.Count)];
             Console.WriteLine($"Le robot {Symbol} joue en position {randomPosition}");
@@ -43,6 +48,6 @@ public class Player
             Console.WriteLine("Position invalide ! Réessayez.");
         }
 
-        return GetMove(board);
+        return await GetMove(board);
     }
 }

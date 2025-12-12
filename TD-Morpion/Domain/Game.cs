@@ -15,15 +15,27 @@ public class Game
         _currentPlayer = _playerX;
     }
     
-    public void Run()
+    public async Task Run()
     {
-        Console.WriteLine("=== JEU DE MORPION ===\n");
+        while (true)
+        {
+            Console.WriteLine("=== JEU DE MORPION ===\n");
+            await PlayRound();
 
+            if (!AskForReplay())
+                break;
+
+            ResetGame();
+        }
+    }
+
+    private async Task PlayRound()
+    {
         while (true)
         {
             _board.Display();
 
-            var (line, column) = _currentPlayer.GetMove(_board);
+            var (line, column) = await _currentPlayer.GetMove(_board);
             _board.PlayMove(line, column, _currentPlayer.Symbol);
 
             if (_board.CheckWin(_currentPlayer.Symbol))
@@ -42,6 +54,27 @@ public class Game
 
             SwitchPlayer();
         }
+    }
+
+    private bool AskForReplay()
+    {
+        Console.WriteLine("\nAppuyez sur Entrée pour rejouer ou tapez 'q' pour quitter...");
+        string? input = Console.ReadLine();
+
+        if (input?.ToLower() == "q")
+        {
+            Console.WriteLine("Merci d'avoir joué !");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void ResetGame()
+    {
+        Console.Clear();
+        _board = new Board();
+        _currentPlayer = _playerX;
     }
 
     private void SwitchPlayer()
