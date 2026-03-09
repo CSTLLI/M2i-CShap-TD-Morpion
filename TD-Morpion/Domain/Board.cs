@@ -101,4 +101,22 @@ public class Board
         }
         return availableMoves;
     }
+
+    public string ExportCells()
+    {
+        var chars = new char[9];
+        for (int i = 0; i < 9; i++)
+        {
+            chars[i] = _cells[i / 3, i % 3];
+        }
+        return new string(chars);
+    }
+
+    public void ImportCells(string cells)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            _cells[i / 3, i % 3] = cells[i];
+        }
+    }
 }
