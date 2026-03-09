@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: morpion-db
+    environment:
+      POSTGRES_USER: morpion
+      POSTGRES_PASSWORD: morpion
+      POSTGRES_DB: morpion
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
